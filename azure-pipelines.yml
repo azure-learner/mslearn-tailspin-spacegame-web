@@ -12,7 +12,7 @@ pool:
   - agent.name -equals MyLinuxAgent #name of self-hosted agent
   - npm
 
-  variables:
+variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '3.1.300'
