@@ -6,9 +6,10 @@
 trigger:
 - master
 
-pool:MyAgentPooldb
+pool:
+  name: MyAgentPooldb
   demands: 
-  - agent.name -equals 'MyLinuxAgent' 
+  - agent.name -equals 'MyLinuxAgent' #name of self-hosted agent
 
 variables:
   buildConfiguration: 'Release'
