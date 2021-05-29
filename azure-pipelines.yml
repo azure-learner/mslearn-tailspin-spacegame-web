@@ -7,7 +7,8 @@ trigger:
 - master
 
 pool:MyAgentPooldb
-  demands: agent.name -equals 'MyLinuxAgent' 
+  demands: 
+  - agent.name -equals 'MyLinuxAgent' 
 
 variables:
   buildConfiguration: 'Release'
