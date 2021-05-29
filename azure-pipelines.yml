@@ -6,8 +6,8 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+pool:MyAgentPooldb
+  demands:agent.name -equals 'MyLinuxAgent' 
 
 variables:
   buildConfiguration: 'Release'
