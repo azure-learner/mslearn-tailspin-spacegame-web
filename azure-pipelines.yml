@@ -13,7 +13,8 @@ pool:
   - npm
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration1: 'Release'
+  buildConfiguration2: 'Debug'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '3.1.300'
 
@@ -45,19 +46,35 @@ steps:
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration)'
+  displayName: 'Build the project - $(buildConfiguration1)'
   inputs:
     command: 'build'
-    arguments: '--no-restore --configuration $(buildConfiguration)'
+    arguments: '--no-restore --configuration $(buildConfiguration1)'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish the project - $(buildConfiguration)'
+  displayName: 'Publish the project - $(buildConfiguration1)'
   inputs:
     command: 'publish'
     projects: '**/*.csproj'
     publishWebProjects: false
-    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    arguments: '--no-build --configuration $(buildConfiguration1) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration1)'
+    zipAfterPublish: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration2)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration2)'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration2)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration2) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration2)'
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
