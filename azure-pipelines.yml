@@ -1,20 +1,13 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - '*'
 
 pool:
-  name: MyAgentPooldb
-  demands: 
-  - agent.name -equals MyLinuxAgent #name of self-hosted agent
-  - npm
+  vmImage: 'ubuntu-18.04'
+  demands:
+    - npm
 
 variables:
-  buildConfiguration1: 'Release'
-  buildConfiguration2: 'Debug'
+  buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '3.1.300'
 
@@ -45,37 +38,13 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration1)'
-  inputs:
-    command: 'build'
-    arguments: '--no-restore --configuration $(buildConfiguration1)'
-    projects: '**/*.csproj'
+- template: templates/build.yml
+  parameters:
+    buildConfiguration: 'Debug'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publish the project - $(buildConfiguration1)'
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    publishWebProjects: false
-    arguments: '--no-build --configuration $(buildConfiguration1) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration1)'
-    zipAfterPublish: true
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration2)'
-  inputs:
-    command: 'build'
-    arguments: '--no-restore --configuration $(buildConfiguration2)'
-    projects: '**/*.csproj'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish the project - $(buildConfiguration2)'
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    publishWebProjects: false
-    arguments: '--no-build --configuration $(buildConfiguration2) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration2)'
-    zipAfterPublish: true
+- template: templates/build.yml
+  parameters:
+    buildConfiguration: 'Release'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
